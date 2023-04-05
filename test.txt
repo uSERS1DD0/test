@@ -293,19 +293,21 @@ async function reading (type) {
   //看文章或者视频
   var time = 1;
   if (type == 0) {
-    time = parseInt(Math.random() * (21) + 80, 10);//80-100秒后关闭页面，看文章
+    time = parseInt(Math.random() * (21) + 60, 10);//80-100秒后关闭页面，看文章
   } else {
     time = parseInt(Math.random() * (21) + 60, 10);//230-250秒后关闭页面，看视频
   }
   let firstTime = time - 2;
-  let secendTime = 12;
+  let secendTime = 20+parseInt(Math.random() * (20), 10);
   let scrollLength = document.body.scrollHeight / 2;
   var readingInterval = setInterval(function() {
     time--;
     $("#studyTip").text(time + " 秒后关闭页面");
     if (time <= firstTime) {
       try {
-        $("html,body").animate({ scrollTop: 394 }, 1000);
+        $("html,body").animate({
+          scrollTop: 300 + parseInt(Math.random() * (200), 10)
+        }, 1259);
       } catch (e) {
         window.scrollTo(0, 394);
       }
@@ -313,7 +315,9 @@ async function reading (type) {
     }
     if (time <= secendTime) {
       try {
-        $("html,body").animate({ scrollTop: scrollLength / 3 }, 1000);
+        $("html,body").animate({
+          scrollTop: scrollLength / 3 + parseInt(Math.random() * (200) )
+        }, 1769);
       } catch (e) {
         window.scrollTo(0, scrollLength / 3);
       }
@@ -390,19 +394,9 @@ function getNews () {
       url: NewsUrl1,
       dataType: "json",
       success: function(data) {
-        let j = 0;
-        for (let i = 0; i < n; i++) {
-          //如果有当天日期的,则加入
-          if (data[j].auditTime.indexOf(currDate) != -1) {
+        for (let j = 0; j < n; j++) {
+          // 加前j个新闻
             news.push(data[j]);
-            j++;
-          } else {//否则跳出循环
-            break;
-          }
-        }
-        for (; j < n; j++) {
-          let temp = parseInt(Math.random() * (20)+6, 10);
-          news.push(data[temp]);
         }
         resolve('done');
       },
@@ -743,7 +737,7 @@ async function doingExam () {
   let nextButton = null;
   let qNum = 0;//题号,第一题从0开始算
   let shouldSaveAnswer = false;
-  let huakuai = setInterval(function() { 
+  let huakuai = setInterval(function() {
     // console.log('检测是否有滑块');
     if (document.getElementsByClassName('nc_iconfont btn_slide')[0] != null) {
       console.log("出现滑块验证，等待滑块验证");
@@ -755,7 +749,7 @@ async function doingExam () {
   },1000)
   while (true) {
     //先等等再开始做题
-    await doingPause(); 
+    await doingPause();
     nextButton = await getNextButton();
     await waitRandomBetween(1, 3);
     if (nextButton.textContent == "再练一次" || nextButton.textContent == "再来一组" || nextButton.textContent == "查看解析") {
